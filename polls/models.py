@@ -10,8 +10,9 @@ class Question(models.Model):
         return self.question_text
     
     def was_published_recently(self):
-        return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
-
+        now = timezone.now()
+        return now - datetime.timedelta(days=1) <= self.pub_date <= now
+ 
 
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
@@ -20,3 +21,24 @@ class Choice(models.Model):
 
     def __str__(self):
         return self.choice_text
+
+class Workout(models.Model):
+    name = models.CharField(max_length = 1000)
+    description = models.CharField(max_length = 3000)
+    date = models.DateTimeField("workout date")
+
+    def __str__(self):
+        return self.name
+
+class Excercise(models.Model):
+    workout = models.ForeignKey(Workout, on_delete=models.CASCADE)
+    excercise = models.CharField(max_length=2000)
+
+    def __str__(self):
+        return self.excercise
+
+class Set(models.Model):
+    excercise = models.ForeignKey(Excercise, on_delete=models.CASCADE)
+    reps = models.IntegerField()
+    weight = models.FloatField(null = True,blank = True)
+

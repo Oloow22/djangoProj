@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout Detail</title>
+</head>
+<body>
+    <h1>{{ workout.name }}</h1>
+    <ul>
+    {% for excercise in workout.excercise_set.all %}
+    <li>
+        <strong>{{ excercise.excercise }}</strong>
+        <ul>
+            {% for set in excercise.set_set.all %}
+            <li>Reps: {{ set.reps }} {% if set.weight %} | Weight: {{ set.weight }}kg {% endif %}</li>
+            {% empty %}
+            <li>No sets present</li>
+            {% endfor %}
+        </ul>
+    </li>
+    {% empty %}
+    <li>You did not add an excercise</li>
+    {% endfor %}
+    </ul>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workouts</title>
+</head>
+<body>
+    <h3>Workouts</h3>
+    {% if workouts %}
+    <ul>
+        {% for workout in workouts %}
+        <a href="{% url 'polls:workout_detail' workout.id %}"><li>{{ workout.name }}</li></a>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No workouts yet</p>
+    {% endif %}
+</body>
+</html>
