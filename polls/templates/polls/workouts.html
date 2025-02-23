@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
 <head>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Workouts</title>
@@ -8,13 +10,24 @@
 <body>
     <h3>Workouts</h3>
     {% if workouts %}
-    <ul>
+    <div class="workout-container">
         {% for workout in workouts %}
-        <a href="{% url 'polls:workout_detail' workout.id %}"><li>{{ workout.name }}</li></a>
+        <a href="{% url 'polls:workout_detail' workout.id %}" class="workout-tile">
+            <div class="tile">
+                <div class="tile-title">{{ workout.name }}</div>
+                <div class="tile-divider"></div>
+                <div class="tile-description">{{ workout.description }}</div>
+            </div>
+        </a>
         {% endfor %}
-    </ul>
+    </div>
     {% else %}
     <p>No workouts yet</p>
     {% endif %}
+
+    <div class="add-workout">
+        <a href="{% url 'polls:add_workout'  %}">Add a workout</a>
+    </div>
 </body>
+
 </html>

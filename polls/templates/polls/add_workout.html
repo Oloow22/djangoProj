@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Workout</title>
+</head>
+<body>
+    <div class="container">
+        <h2 class="page-title">Add a New Workout</h2>
+        
+        <form method="post" class="workout-form">
+            {% csrf_token %}
+            
+            <div class="workout-section">
+                <h3 class="section-title">Workout Details</h3>
+                <div class="form-group">
+                    {{ workout_form.as_p }}
+                </div>
+            </div>
+
+            <div class="exercise-section">
+                <h3 class="section-title">Exercises</h3>
+                <div id="exercise-container">
+                    <div class="exercise">
+                        <label>Exercise Name: <input type="text" name="exercise[]" class="input-field"></label><br>
+                        <label>Reps: <input type="number" name="reps[]" class="input-field"></label><br>
+                        <label>Weight (kg): <input type="number" step="0.1" name="weight[]" class="input-field"></label><br>
+                        <button type="button" class="remove-btn" onclick="removeExercise(this)">Remove</button>
+                    </div>
+                </div>
+                
+                <button type="button" class="add-btn" onclick="addExercise()">Add Another Exercise</button>
+            </div>
+
+            <button type="submit" class="submit-btn">Save Workout</button>
+        </form>
+    </div>
+
+    <script>
+        function addExercise() {
+            let container = document.getElementById('exercise-container');
+            let newExercise = document.createElement('div');
+            newExercise.classList.add('exercise');
+            newExercise.innerHTML = `
+                <label>Exercise Name: <input type="text" name="exercise[]" class="input-field"></label><br>
+                <label>Reps: <input type="number" name="reps[]" class="input-field"></label><br>
+                <label>Weight (kg): <input type="number" step="0.1" name="weight[]" class="input-field"></label><br>
+                <button type="button" class="remove-btn" onclick="removeExercise(this)">Remove</button>
+            `;
+            container.appendChild(newExercise);
+        }
+
+        function removeExercise(button) {
+            button.parentElement.remove();
+        }
+    </script>
+</body>
+
+</html>

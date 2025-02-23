@@ -8,11 +8,11 @@
 <body>
     <h1>{{ workout.name }}</h1>
     <ul>
-    {% for excercise in workout.excercise_set.all %}
+    {% for exercise in workout.exercise_set.all %}
     <li>
-        <strong>{{ excercise.excercise }}</strong>
+        <strong>{{ exercise.exercise }}</strong>
         <ul>
-            {% for set in excercise.set_set.all %}
+            {% for set in exercise.set_set.all %}
             <li>Reps: {{ set.reps }} {% if set.weight %} | Weight: {{ set.weight }}kg {% endif %}</li>
             {% empty %}
             <li>No sets present</li>
@@ -23,5 +23,13 @@
     <li>You did not add an excercise</li>
     {% endfor %}
     </ul>
+
+    <div>
+        <button><a href="{% url 'polls:add_workout'  %}">Add a workout</a></button>
+    </div>
+
+    <div>
+        <button><a href="{% url 'polls:workout_list'  %}">Home</a></button>
+    </div>
 </body>
 </html>

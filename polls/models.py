@@ -30,15 +30,15 @@ class Workout(models.Model):
     def __str__(self):
         return self.name
 
-class Excercise(models.Model):
+class Exercise(models.Model):
     workout = models.ForeignKey(Workout, on_delete=models.CASCADE)
-    excercise = models.CharField(max_length=2000)
+    exercise = models.CharField(max_length=2000)
 
     def __str__(self):
-        return self.excercise
+        return self.exercise
 
 class Set(models.Model):
-    excercise = models.ForeignKey(Excercise, on_delete=models.CASCADE)
+    exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE)
     reps = models.IntegerField()
     weight = models.FloatField(null = True,blank = True)
 
