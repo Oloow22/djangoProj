@@ -8,7 +8,13 @@
     <title>Workouts</title>
 </head>
 <body>
+    <form action="{% url 'polls:logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="remove-btn">Logout</button>
+    </form>
+
     <h3>Workouts</h3>
+
     {% if workouts %}
     <div class="workout-container">
         {% for workout in workouts %}
@@ -28,6 +34,9 @@
     <div class="add-workout">
         <a href="{% url 'polls:add_workout'  %}">Add a workout</a>
     </div>
+
+   
+    
 </body>
 
 </html>

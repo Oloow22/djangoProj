@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+</head>
+<body style="display: flex; align-items: center; justify-content: center;">
+    <div class="login-frm">
+        <h2>Sign Up</h2>
+        
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li style="color: red;">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            <label>Username:</label>
+            <input style="width: 400px;" class="input-field" type="text" name="username" required><br><br>
+
+            <div style="display: flex; flex-direction: column;">
+            <label>Email:</label>
+            <input style="width: 400px;" class="input-field" type="email" name="email" required><br><br>
+            </div>
+            <label>Password:</label>
+            <input style="width: 400px;" class="input-field" type="password" name="password" required><br><br>
+
+            <label>Confirm Password:</label>
+            <input style="width: 400px;" class="input-field" type="password" name="confirm_password" required><br><br>
+
+            <button type="submit" class="add-btn">Sign Up</button>
+        </form>
+
+        <p>Already have an account? <a href="{% url 'polls:login' %}">Log in</a></p>
+
+    </div>
+</body>
+</html>

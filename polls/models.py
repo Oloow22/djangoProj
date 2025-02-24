@@ -33,6 +33,7 @@ class Workout(models.Model):
 class Exercise(models.Model):
     workout = models.ForeignKey(Workout, on_delete=models.CASCADE)
     exercise = models.CharField(max_length=2000)
+    sets = models.CharField(max_length=100)
 
     def __str__(self):
         return self.exercise

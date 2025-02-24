@@ -12,7 +12,7 @@ class WorkoutForm(forms.ModelForm):
 class ExerciseForm(forms.ModelForm):
     class Meta:
         model = Exercise
-        fields = ['exercise']
+        fields = ['exercise','sets']
 
 class SetForm(forms.ModelForm):
     class Meta:

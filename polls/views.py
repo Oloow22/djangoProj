@@ -7,8 +7,12 @@ from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
 from .forms import WorkoutForm,ExerciseForm,SetForm
+from django.contrib.auth import authenticate,login,logout
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
-
+@login_required
 def workout_list(request):
     workouts = Workout.objects.order_by("-date")
     context = {
@@ -16,10 +20,12 @@ def workout_list(request):
     }
     return render(request,"polls/workouts.html",context)
 
+@login_required
 def workout_detail(request,workout_id):
     workout = get_object_or_404(Workout, pk = workout_id)
     return render(request, "polls/workout_detail.html",{"workout":workout})
 
+@login_required
 def add_workout(request):
     if request.method == "POST":
         workout_form = WorkoutForm(request.POST)
@@ -29,11 +35,14 @@ def add_workout(request):
             exercises = request.POST.getlist('exercise[]')
             reps_list = request.POST.getlist('reps[]')
             weights_list = request.POST.getlist('weight[]')
+            sets_list = request.POST.getlist('sets[]')
 
             for i, exercise_name in enumerate(exercises):
                 if exercise_name.strip():
-                    exercise = Exercise.objects.create(workout=workout,exercise=exercise_name)
+                    sets = sets_list[i] if i < len(sets_list) else None
+                    exercise = Exercise.objects.create(workout=workout,exercise=exercise_name,sets=sets)
                     reps = reps_list[i] if i < len(reps_list) else None
+                    sets = sets_list[i] if i < len(sets_list) else None
                     weight = weights_list[i] if i < len(weights_list) else None
                     if reps:
                         try:
@@ -49,20 +58,7 @@ def add_workout(request):
     
     return render(request, 'polls/add_workout.html', {'workout_form':workout_form})
 
-class IndexView(generic.ListView):
-    template_name = "polls/index.html"
-    context_object_name = "latest_question_list"
 
-    def get_queryset(self):
-        return Question.objects.filter(pub_date__lte=timezone.now()).order_by("-pub_date")[:5]
-
-class DetailView(generic.DetailView):
-    model = Question
-    template_name = "polls/detail.html"
-
-class ResultsView(generic.DetailView):
-    model = Question
-    template_name = "polls/results.html"
 
 def vote(request, question_id):
     question = get_object_or_404(Question, pk = question_id)
@@ -82,3 +78,48 @@ def vote(request, question_id):
         selected_choice.save() 
 
         return HttpResponseRedirect(reverse("polls:results",args = (question.id,)))
+
+def login_view(request):
+    if request.method == "POST":
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(request,username=username,password=password)
+
+        if user is not None:
+            login(request,user)
+            return redirect("polls:workout_list")
+        else:
+            messages.error(request,"Invalid username or password")
+    
+    return render(request,"polls/login.html")
+
+def logout_view(request):
+    logout(request)
+    return redirect("polls:login")
+
+def signup_view(request):
+    if request.method == "POST":
+        username = request.POST["username"]
+        email = request.POST["email"]
+        password = request.POST["password"]
+        confirm_password = request.POST["confirm_password"]
+
+        if password != confirm_password:
+            messages.error(request,"Passwords do not match")
+            return redirect("polls:signup")
+        
+        if User.objects.filter(username=username).exists():
+            messages.error(request,"User name already exists")
+            return redirect("polls:signup")
+        
+        if User.objects.filter(email=email).exists():
+            messages.error(request,"Email already in use")
+            return redirect("polls:signup")
+        
+        user = User.objects.create_user(username=username,email=email,password=password)
+        user.save
+
+        login(request,user)
+        return redirect("polls:workout_list")
+    
+    return render(request,"polls/signup.html")

@@ -1,35 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
 <head>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Workout Detail</title>
 </head>
 <body>
-    <h1>{{ workout.name }}</h1>
-    <ul>
-    {% for exercise in workout.exercise_set.all %}
-    <li>
-        <strong>{{ exercise.exercise }}</strong>
-        <ul>
-            {% for set in exercise.set_set.all %}
-            <li>Reps: {{ set.reps }} {% if set.weight %} | Weight: {{ set.weight }}kg {% endif %}</li>
-            {% empty %}
-            <li>No sets present</li>
-            {% endfor %}
-        </ul>
-    </li>
-    {% empty %}
-    <li>You did not add an excercise</li>
-    {% endfor %}
-    </ul>
+    <h3>{{ workout.name }}</h3>
+    <div class="workout-container2">
+        {% for exercise in workout.exercise_set.all %}
+        <div class="tile" style="margin-bottom: 8px;">
+            <div class="tile-title">{{ exercise.exercise }}</div>
+            <div class="tile-divider"></div>
+            <p> Sets: {{ exercise.sets }}</p>
+            <ul>
+                {% for set in exercise.set_set.all %}
+                <li>Reps: {{ set.reps }} {% if set.weight %} | Weight: {{ set.weight }}kg {% endif %}</li>
+                {% empty %}
+                <li>No sets present</li>
+                {% endfor %}
+            </ul>
+        </div>
+    
+        {% empty %}
+        <p>You did not add an excercise</p>
+        {% endfor %}
+    </div>
+    
 
     <div>
-        <button><a href="{% url 'polls:add_workout'  %}">Add a workout</a></button>
+        <div class="add-workout"><a href="{% url 'polls:add_workout'  %}">Add a workout</a></div>
     </div>
 
     <div>
-        <button><a href="{% url 'polls:workout_list'  %}">Home</a></button>
+        <div class="add-workout"><a href="{% url 'polls:workout_list'  %}">Home</a></div>
     </div>
 </body>
 </html>
